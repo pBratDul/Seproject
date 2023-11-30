@@ -12,8 +12,17 @@ class ImageComparator:
         self.image1 = Image.open(image1_path)
         self.image2 = Image.open(image2_path)
 
+        # Calculate initial zoom factor to fit the entire image within the window
+        window_width = root.winfo_screenwidth()
+        window_height = root.winfo_screenheight()
+        initial_zoom_factor = min(window_width / self.image1.width, window_height / self.image1.height)
+        self.zoom_factor = initial_zoom_factor
+
         # Set initial zoom factor
-        self.zoom_factor = 1.0
+        #self.zoom_factor = 1.0
+
+        # Variables for dragging
+        self.drag_data = {"x": 0, "y": 0, "item": None}
 
         # Create canvas for image display
         self.canvas = tk.Canvas(root, bg="white")
@@ -25,7 +34,8 @@ class ImageComparator:
         self.compare_slider.pack(pady=10)
 
         # Bind mouse events for dragging and zooming
-        self.canvas.bind("<B1-Motion>", self.drag_image)
+        self.canvas.bind("<ButtonPress-1>", self.on_press)
+        self.canvas.bind("<B1-Motion>", self.on_drag)
         self.canvas.bind("<MouseWheel>", self.zoom_image)
 
         # Bind slider motion to update the display smoothly
@@ -74,8 +84,12 @@ class ImageComparator:
                                 position * self.canvas.winfo_width(), self.canvas.winfo_height(),
                                 fill="red", tags="comparison_line")
 
-    def drag_image(self, event):
-        # Drag images on canvas
+    def on_press(self, event):
+        # Mark the starting point for dragging
+        self.canvas.scan_mark(event.x, event.y)
+
+    def on_drag(self, event):
+        # Drag images on canvas based on the current cursor position
         self.canvas.scan_dragto(event.x, event.y, gain=1)
         self.display_images()
 
@@ -93,8 +107,11 @@ class ImageComparator:
 
 if __name__ == "__main__":
     # Replace 'image1.png' and 'image2.png' with the paths to your images
-    path1 = "Kuba.jpg"
-    path2 = "Łukasz.jpg"
+    #path1 = "Kuba.jpg"
+    #path2 = "Łukasz.jpg"
+    path1 = "test_images/imgset0000/QM008.png"
+    path2 = "test_images/imgset0000/QM010.png"
     root = tk.Tk()
+    root.attributes("-fullscreen", True)
     app = ImageComparator(root, path1, path2)
     root.mainloop()
