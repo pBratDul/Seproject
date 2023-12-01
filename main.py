@@ -12,14 +12,14 @@ class ImageComparator:
         self.image1 = Image.open(image1_path)
         self.image2 = Image.open(image2_path)
 
+        # Set initial zoom factor
+        #self.zoom_factor = 1.0
+
         # Calculate initial zoom factor to fit the entire image within the window
         window_width = root.winfo_screenwidth()
         window_height = root.winfo_screenheight()
         initial_zoom_factor = min(window_width / self.image1.width, window_height / self.image1.height)
         self.zoom_factor = initial_zoom_factor
-
-        # Set initial zoom factor
-        #self.zoom_factor = 1.0
 
         # Variables for dragging
         self.drag_data = {"x": 0, "y": 0, "item": None}
@@ -49,8 +49,8 @@ class ImageComparator:
         width = int(self.image1.width * self.zoom_factor)
         height = int(self.image1.height * self.zoom_factor)
 
-        resized_image1 = self.image1.resize((width, height), Image.LANCZOS)
-        resized_image2 = self.image2.resize((width, height), Image.LANCZOS)
+        resized_image1 = self.image1.resize((width, height), Image.BILINEAR)
+        resized_image2 = self.image2.resize((width, height), Image.BILINEAR)
 
         # Get the separation position from the slider
         position = self.compare_slider.get() / 100.0
@@ -79,9 +79,13 @@ class ImageComparator:
     def update_comparison(self, event):
         # Update image comparison based on slider position
         position = self.compare_slider.get() / 100.0
+
+        # Calculate the separation point based on the image width
+        separation_point = int(position * self.image1.width * self.zoom_factor)
+
         self.canvas.delete("comparison_line")
-        self.canvas.create_line(position * self.canvas.winfo_width(), 0,
-                                position * self.canvas.winfo_width(), self.canvas.winfo_height(),
+        self.canvas.create_line(separation_point, 0,
+                                separation_point, self.canvas.winfo_height(),
                                 fill="red", tags="comparison_line")
 
     def on_press(self, event):
@@ -98,7 +102,6 @@ class ImageComparator:
         factor = 1.2 if event.delta > 0 else 0.8
         self.zoom_factor *= factor
         self.display_images()
-    #tets
 
     def on_slider_motion(self, event):
         # Update the display smoothly when moving the slider
@@ -109,8 +112,13 @@ if __name__ == "__main__":
     # Replace 'image1.png' and 'image2.png' with the paths to your images
     #path1 = "Kuba.jpg"
     #path2 = "Łukasz.jpg"
-    path1 = "test_images/imgset0000/QM008.png"
-    path2 = "test_images/imgset0000/QM010.png"
+
+    #path1 = "test_images/imgset0000/QM008.png"
+    #path2 = "test_images/imgset0000/QM010.png"
+
+    path1 = "test_images/imgset0594/QM009.png"
+    path2 = "test_images/imgset0594/QM016.png"
+
     root = tk.Tk()
     root.attributes("-fullscreen", True)
     app = ImageComparator(root, path1, path2)
