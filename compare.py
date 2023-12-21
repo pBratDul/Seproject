@@ -28,16 +28,22 @@ class ImageComparator(QMainWindow):
         self.view = CustomGraphicsView(self.scene)  # Use custom QGraphicsView
         self.setCentralWidget(self.view)
 
-        # Create compare slider
-        self.compare_slider = QSlider(Qt.Orientation.Horizontal)
-        self.compare_slider.setRange(0, 100)
-        self.compare_slider.setValue(50)
-        self.compare_slider.sliderMoved.connect(self.update_comparison)
+        # Create compare sliders for X and Y axes
+        self.compare_slider_x = QSlider(Qt.Orientation.Horizontal)
+        self.compare_slider_x.setRange(0, 100)
+        self.compare_slider_x.setValue(50)
+        self.compare_slider_x.sliderMoved.connect(self.update_comparison)
+
+        self.compare_slider_y = QSlider(Qt.Orientation.Vertical)
+        self.compare_slider_y.setRange(0, 100)
+        self.compare_slider_y.setValue(50)
+        self.compare_slider_y.sliderMoved.connect(self.update_comparison)
 
         # Create toolbar
         toolbar = self.addToolBar("Image Comparison")
-        toolbar.addWidget(self.compare_slider)
-       
+        toolbar.addWidget(self.compare_slider_x)
+        toolbar.addWidget(self.compare_slider_y)
+
         # Create back button
         back_button = QPushButton("Back")
         back_button.clicked.connect(self.go_back)
@@ -45,10 +51,11 @@ class ImageComparator(QMainWindow):
 
         # Display initial images
         self.display_images()
-     
+
     def go_back(self):
         # Close the current window
         self.close()
+
     def display_images(self):
         # Resize images based on zoom factor
         width = int(self.image1.width() * self.zoom_factor)
@@ -57,21 +64,36 @@ class ImageComparator(QMainWindow):
         resized_image1 = self.image1.scaled(width, height)
         resized_image2 = self.image2.scaled(width, height)
 
-        # Get the separation position from the slider
-        position = self.compare_slider.value() / 100.0
+        # Get the separation position from the sliders
+        position_x = self.compare_slider_x.value() / 100.0
+        position_y = self.compare_slider_y.value() / 100.0
 
-        # Calculate the separation point
-        separation_point = int(position * width)
+        # Calculate the separation points
+        separation_point_x = int(position_x * width)
+        separation_point_y = int(position_y * height)
 
-        # Create two images, one for the left side and one for the right side of the separation point
-        left_image = resized_image1.copy(0, 0, separation_point, height)
-        right_image = resized_image2.copy(separation_point, 0, width - separation_point, height)
+        # Create four images based on the separation points
+        top_left_image = resized_image2.copy(0, 0, separation_point_x, separation_point_y)
+        top_right_image = resized_image1.copy(separation_point_x, 0, width - separation_point_x, separation_point_y)
+        bottom_left_image = resized_image1.copy(0, separation_point_y, separation_point_x, height - separation_point_y)
+        bottom_right_image = resized_image2.copy(separation_point_x, separation_point_y, width - separation_point_x,
+                                                 height - separation_point_y)
 
-        # Create a composite image by overlaying the second image on top of the first one
+        # Create a composite image by overlaying the four images
         composite_image = QImage(width, height, QImage.Format.Format_RGB32)
         painter = QPainter(composite_image)
-        painter.drawImage(0, 0, left_image)
-        painter.drawImage(separation_point, 0, right_image)
+        painter.drawImage(0, 0, top_left_image)
+        painter.drawImage(separation_point_x, 0, top_right_image)
+        painter.drawImage(0, separation_point_y, bottom_left_image)
+        painter.drawImage(separation_point_x, separation_point_y, bottom_right_image)
+
+        # Draw a vertical line at the separation point on the composite image
+        painter.setPen(Qt.PenStyle.DashLine)
+        painter.drawLine(separation_point_x, 0, separation_point_x, height)
+
+        # Draw a horizontal line at the separation point on the composite image
+        painter.drawLine(0, separation_point_y, width, separation_point_y)
+
         painter.end()
 
         # Display the composite image on the graphics scene
@@ -81,10 +103,9 @@ class ImageComparator(QMainWindow):
         self.scene.addItem(item)
 
     def update_comparison(self):
-        # Update image comparison based on slider position
+        # Update image comparison based on slider positions
         self.display_images()
-    
-   
+
 
 class CustomGraphicsView(QGraphicsView):
     def __init__(self, scene):
@@ -118,4 +139,3 @@ class CustomGraphicsView(QGraphicsView):
             # Update the scroll bars
             self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - delta.x())
             self.verticalScrollBar().setValue(self.verticalScrollBar().value() - delta.y())
-
