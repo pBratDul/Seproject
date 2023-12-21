@@ -15,8 +15,8 @@ if __name__ == "__main__":
         #path1 = "test_images/imgset0000/QM008.png"
         #path2 = "test_images/imgset0000/QM010.png"
 
-        path1 = "B1.png"
-        path2 = "C2.png"
+        path1 = "Fire.png"
+        path2 = "Water.png"
 
         #path1 = "C1.png"
         #path2 = "C2.png"
@@ -32,8 +32,8 @@ if __name__ == "__main__":
 
     elif what_to_test == "mozaik":
         app = QApplication(sys.argv)
-        path1 = "Fire.png"
-        path2 = "Water.png"
+        path1 = "Water.png"
+        path2 = "Fire.png"
 
         window = Mozaik.Mozaik(path1, path2)
         window.showFullScreen()

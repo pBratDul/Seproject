@@ -1,3 +1,4 @@
+from PyQt6.QtWidgets import QLabel
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import QImage, QPixmap, QPainter
 from PyQt6.QtWidgets import QApplication, QMainWindow, QGraphicsScene, QGraphicsView, QSlider, QToolBar, \
@@ -30,14 +31,16 @@ class Mozaik(QMainWindow):
 
         # Create compare slider
         self.compare_slider = QSlider(Qt.Orientation.Horizontal)
-        self.compare_slider.setRange(0, 100)
-        self.compare_slider.setValue(50)
+        self.compare_slider.setRange(0, 500)
+        self.compare_slider.setValue(10)
         self.compare_slider.sliderMoved.connect(self.update_comparison)
+
+        self.grid_size_label = QLabel("Grid Size: 50")
 
         # Create toolbar
         toolbar = self.addToolBar("Mozaik")
         toolbar.addWidget(self.compare_slider)
-
+        toolbar.addWidget(self.grid_size_label)
         # Display initial images
         self.display_images()
 
@@ -55,6 +58,8 @@ class Mozaik(QMainWindow):
         rows = grid_size
         cols = grid_size
 
+        self.grid_size_label.setText(f"Grid Size: {self.compare_slider.value()}")
+
         # Calculate the size of each cell in the grid
         cell_width = width // cols
         cell_height = height // rows
@@ -71,6 +76,7 @@ class Mozaik(QMainWindow):
 
                 # Calculate the ending point of each cell
                 cell_width_end = cell_width if col < cols - 1 else width - col * cell_width
+
                 cell_height_end = cell_height if row < rows - 1 else height - row * cell_height
 
                 # Use the position to determine which image to use for each cell
@@ -96,7 +102,7 @@ class Mozaik(QMainWindow):
     def update_comparison(self):
         # Update image comparison based on slider position
         self.display_images()
-
+        self.grid_size_label.setText(f"Grid Size: {self.compare_slider.value()}")
 
 class CustomGraphicsView(QGraphicsView):
     def __init__(self, scene):
