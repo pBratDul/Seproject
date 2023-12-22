@@ -52,11 +52,11 @@ class Mozaik(QMainWindow):
         self.close()
     def display_images(self):
         # Resize images based on zoom factor
-        width = int(self.image1.width() * self.zoom_factor)
-        height = int(self.image1.height() * self.zoom_factor)
+        width = int(self.image1.width())# * self.zoom_factor)
+        height = int(self.image1.height())# * self.zoom_factor)
 
-        resized_image1 = self.image1.scaled(width, height)
-        resized_image2 = self.image2.scaled(width, height)
+        resized_image1 = self.image1#.scaled(width, height)
+        resized_image2 = self.image2#.scaled(width, height)
 
         grid_size = self.compare_slider.value()
         if grid_size == 0: grid_size = 1
@@ -79,8 +79,8 @@ class Mozaik(QMainWindow):
                 cell_y = row * cell_height
 
                 # Calculate the ending point of each cell
-                cell_width_end = cell_width if col < cols - 1 else width - col * cell_width
-                cell_height_end = cell_height if row < rows - 1 else height - row * cell_height
+                cell_width_end = cell_width# if col < cols - 1 else width - col * cell_width
+                cell_height_end = cell_height #if row < rows - 1 else height - row * cell_height
 
                 # Use the position to determine which image to use for each cell
                 if (row + col) % 2 == 0:
