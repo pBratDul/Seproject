@@ -1,0 +1,55 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import sys\r\n\r\nimport Mozaik\r\nimport compare\r\nfrom PyQt6.QtWidgets import QApplication\r\nif __name__ == \"__main__\":\r\n\r\n    # Żeby łatwo testować, twórzcie własny elif poniżej ze zmienną 'what_to_test'\r\n    what_to_test = \"mozaik\"\r\n    # what_to_test = \"nic\"\r\n\r\n    if what_to_test == \"slider_compare\":\r\n        app = QApplication(sys.argv)\r\n\r\n        #path1 = \"test_images/imgset0000/QM008.png\"\r\n        #path2 = \"test_images/imgset0000/QM010.png\"\r\n\r\n        path1 = \"B1.png\"\r\n        path2 = \"C2.png\"\r\n\r\n        #path1 = \"C1.png\"\r\n        #path2 = \"C2.png\"\r\n\r\n        window = compare.ImageComparator(path1, path2)\r\n        window.showFullScreen()\r\n\r\n        sys.exit(app.exec())\r\n\r\n    elif what_to_test == \"nic\":\r\n        print(\"tets\")\r\n\r\n\r\n    elif what_to_test == \"mozaik\":\r\n        app = QApplication(sys.argv)\r\n        path1 = \"Fire.png\"\r\n        path2 = \"Water.png\"\r\n\r\n        window = Mozaik.Mozaik(path1, path2)\r\n        window.showFullScreen()\r\n\r\n        sys.exit(app.exec())\r\n\r\n    else:\r\n        print(\"Stwórz własny elif, który będzie odpowiadał za odpalenie Twojego kodu, \"\r\n              \"następnie wpisz wymagany string w zmiennej 'what_to_test', \"\r\n              \"żeby warunek był spełniony\")\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	
++++ b/main.py	
+@@ -6,7 +6,7 @@
+ if __name__ == "__main__":
+ 
+     # Żeby łatwo testować, twórzcie własny elif poniżej ze zmienną 'what_to_test'
+-    what_to_test = "mozaik"
++    what_to_test = "slider_compare"
+     # what_to_test = "nic"
+ 
+     if what_to_test == "slider_compare":
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/Seproject.iml\" filepath=\"$PROJECT_DIR$/.idea/Seproject.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	
++++ b/.idea/modules.xml	
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/Seproject.iml" filepath="$PROJECT_DIR$/.idea/Seproject.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/SEproject.iml" filepath="$PROJECT_DIR$/.idea/SEproject.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"Black\">\r\n    <option name=\"sdkName\" value=\"Python 3.8\" />\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.8\" project-jdk-type=\"Python SDK\" />\r\n</project>
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	
++++ b/.idea/misc.xml	
+@@ -1,7 +1,4 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="Black">
+-    <option name="sdkName" value="Python 3.8" />
+-  </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
