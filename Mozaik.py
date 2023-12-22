@@ -1,3 +1,5 @@
+import math
+
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtGui import QImage, QPixmap, QPainter
 from PyQt6.QtWidgets import QApplication, QMainWindow, QGraphicsScene, QGraphicsView, \
@@ -30,8 +32,8 @@ class Mozaik(QMainWindow):
 
         # Create compare slider
         self.compare_slider = QSlider(Qt.Orientation.Horizontal)
-        self.compare_slider.setRange(0, 100)
-        self.compare_slider.setValue(50)
+        self.compare_slider.setRange(2, 50)
+        self.compare_slider.setValue(5)
         self.compare_slider.sliderMoved.connect(self.update_comparison)
 
         self.grid_size_label = QLabel("Grid Size: 50")
@@ -59,16 +61,19 @@ class Mozaik(QMainWindow):
         resized_image2 = self.image2.scaled(width, height)
 
         grid_size = self.compare_slider.value()
-        if grid_size == 0: grid_size = 1
+
+
 
         rows = grid_size
         cols = grid_size
 
-        self.grid_size_label.setText(f"Grid Size: {self.compare_slider.value()}")
+
 
         # Calculate the size of each cell in the grid
-        cell_width = width // cols
-        cell_height = height // rows
+        cell_width = math.ceil(width / cols)
+        cell_height = math.ceil(width / cols)
+
+        self.grid_size_label.setText(f"Grid Size: {cell_width}")
 
         # Create a composite image with a mosaic pattern
         composite_image = QImage(width, height, QImage.Format.Format_RGB32)
@@ -81,8 +86,8 @@ class Mozaik(QMainWindow):
                 cell_y = row * cell_height
 
                 # Calculate the ending point of each cell
-                cell_width_end = cell_width if col < cols - 1 else width - col * cell_width
-                cell_height_end = cell_height if row < rows - 1 else height - row * cell_height
+                cell_width_end = cell_width# if col < cols - 1 else width - col * cell_width
+                cell_height_end = cell_height# if row < rows - 1 else height - row * cell_height
 
                 # Use the position to determine which image to use for each cell
                 if (row + col) % 2 == 0:
@@ -96,6 +101,7 @@ class Mozaik(QMainWindow):
                 # Draw the image on the composite image
                 painter.drawImage(cell_x, cell_y, cell_image)
 
+
         painter.end()
 
         # Display the composite image on the graphics scene
@@ -107,7 +113,6 @@ class Mozaik(QMainWindow):
     def update_comparison(self):
         # Update image comparison based on slider position
         self.display_images()
-        self.grid_size_label.setText(f"Grid Size: {self.compare_slider.value()}")
 
 class CustomGraphicsView(QGraphicsView):
     def __init__(self, scene):
