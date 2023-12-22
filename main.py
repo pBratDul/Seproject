@@ -15,6 +15,13 @@ class MyApp(QMainWindow):
         uic.loadUi('menu.ui', self)
         self.setWindowTitle('Image Comparator')
 
+        toolbar = self.addToolBar("Menu")
+        toolbar2 = self.addToolBar("Menu")
+        self.Image1PathName = QLabel("Image 1")
+        self.Image2PathName = QLabel("Image 2")
+        toolbar.addWidget(self.Image1PathName)
+        toolbar2.addWidget(self.Image2PathName)
+
         self.button1 = self.findChild(QPushButton, 'pushButton')
         self.button2 = self.findChild(QPushButton, 'pushButton_2')
         self.ImageSelectButton = self.findChild(QPushButton, 'ImageSelect')
@@ -31,6 +38,9 @@ class MyApp(QMainWindow):
 
         self.path1 = "Fire.png"
         self.path2 = "Water.png"
+
+        self.Image1PathName.setText(f"File Path 1: {self.path1}")
+        self.Image2PathName.setText(f"File Path 2: {self.path2}")
 
         # Set up background image
         self.set_background_image("tlomenu.gif")
@@ -96,6 +106,8 @@ class MyApp(QMainWindow):
             selected_file = file_dialog.selectedFiles()[0]
             #print(selected_file)
             self.path1 = selected_file;
+            self.Image1PathName.setText(f"File Path 1: {selected_file}")
+
 
 
     def OpenFile2(self):
@@ -109,6 +121,7 @@ class MyApp(QMainWindow):
             selected_file = file_dialog.selectedFiles()[0]
             # print(selected_file)
             self.path2 = selected_file;
+            self.Image2PathName.setText(f"File Path 12: {selected_file}")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
