@@ -66,7 +66,7 @@ class ImageComparator(QMainWindow):
 
         # Get the separation position from the sliders
         position_x = self.compare_slider_x.value() / 100.0
-        position_y = self.compare_slider_y.value() / 100.0
+        position_y = 1.0 - (self.compare_slider_y.value() / 100.0)
 
         # Calculate the separation points
         separation_point_x = int(position_x * width)
